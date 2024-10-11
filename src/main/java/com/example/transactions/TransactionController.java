@@ -1,32 +1,46 @@
 package com.example.transactions;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 public class TransactionController {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionAssembler transactionAssembler;
 
-    public TransactionController(TransactionRepository transactionRepository) {
+    public TransactionController(TransactionRepository transactionRepository, TransactionAssembler transactionAssembler) {
         this.transactionRepository = transactionRepository;
+        this.transactionAssembler = transactionAssembler;
     }
 
     @GetMapping("/transactions")
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    public CollectionModel<EntityModel<Transaction>> getAllTransactions() {
+        List<EntityModel<Transaction>> transactions = transactionRepository.findAll().stream()
+                .map(transactionAssembler::toModel)
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(transactions, linkTo(methodOn(TransactionController.class).getAllTransactions()).withSelfRel());
     }
 
     @PostMapping("/transactions")
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionRepository.save(transaction);
+    public EntityModel<Transaction> createTransaction(@RequestBody Transaction transaction) {
+        return transactionAssembler.toModel(transactionRepository.save(transaction));
     }
 
     @GetMapping("/transactions/{id}")
-    public Transaction getTransaction(@PathVariable Long id) {
-        return transactionRepository.findById(id)
+    public EntityModel<Transaction> getTransaction(@PathVariable Long id) {
+        Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
+
+        return transactionAssembler.toModel(transaction);
     }
 
     @PutMapping("/transactions/{id}")
