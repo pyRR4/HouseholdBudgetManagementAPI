@@ -1,4 +1,4 @@
-package com.example.transactions;
+package com.example.transactions.exceptions;
 
 public class TransactionNotFoundException extends RuntimeException {
     public TransactionNotFoundException(Long id) {
