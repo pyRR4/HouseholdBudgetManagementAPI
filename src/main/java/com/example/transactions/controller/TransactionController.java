@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.transactions.controller.TransactionMapper.toEntity;
+import static com.example.transactions.controller.TransactionMapper.toResponse;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
@@ -25,38 +27,44 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<TransactionEntity>> getAllTransactions() {
-        List<TransactionEntity> transactions = transactionRepository.findAll();
+    public ResponseEntity<List<TransactionResponse>> getAllTransactions() {
+        List<TransactionResponse> transactions = transactionRepository.findAll().stream()
+                .map(TransactionMapper::toResponse)
+                .toList();
 
         return ResponseEntity
                 .ok(transactions);
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<TransactionEntity> createTransaction(@RequestBody TransactionEntity transactionEntity) {
-        TransactionEntity savedTransactionEntity = transactionRepository.save(transactionEntity);
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionResponse transactionResponse) {
+        TransactionEntity savedTransactionEntity = transactionRepository.save(toEntity(transactionResponse));
 
         return ResponseEntity
                 .created(linkTo(methodOn(TransactionController.class)
                         .getTransaction(savedTransactionEntity.getTransaction_id())).toUri())
-                .body(savedTransactionEntity);
+                .body(transactionResponse);
     }
 
     @GetMapping("/transactions/{id}")
-    public ResponseEntity<TransactionEntity> getTransaction(@PathVariable Long id) {
+    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable Long id) {
         TransactionEntity transactionEntity = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
 
+        TransactionResponse transactionResponse = toResponse(transactionEntity);
+
         return ResponseEntity
-                .ok(transactionEntity);
+                .ok(transactionResponse);
     }
 
     @PutMapping("/transactions/{id}")
-    public ResponseEntity<TransactionEntity> updateTransaction(@PathVariable Long id, @RequestBody TransactionEntity transactionEntity) {
+    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable Long id, @RequestBody TransactionEntity transactionEntity) {
         TransactionEntity updatedTransactionEntity = transactionService.updateTransaction(id, transactionEntity);
 
+        TransactionResponse updatedTransactionResponse = toResponse(updatedTransactionEntity);
+
         return ResponseEntity
-                .ok(updatedTransactionEntity);
+                .ok(updatedTransactionResponse);
     }
 
     @DeleteMapping("/transactions/{id}")
