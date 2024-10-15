@@ -18,6 +18,7 @@ public class UserEntity {
     private String password;
     private String nickname;
     private String email;
+    private double balance;
 
     public UserEntity() {}
 
