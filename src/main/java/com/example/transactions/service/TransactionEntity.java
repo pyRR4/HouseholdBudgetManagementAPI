@@ -22,6 +22,7 @@ public class TransactionEntity {
     private Date transactionDate;
     private boolean expense;
     private String transactionCategory;
+    private String hashCode;
 
     private static final ArrayList<String> categories = new ArrayList<>(List.of("DEFAULT"));
 

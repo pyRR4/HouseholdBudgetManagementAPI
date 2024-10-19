@@ -9,16 +9,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.transactions.controller.TransactionMapper.toEntity;
 import static com.example.transactions.controller.TransactionMapper.toResponse;
 
 @Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final HashingService hashingService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, HashingService hashingService) {
         this.transactionRepository = transactionRepository;
+        this.hashingService = hashingService;
     }
 
     public List<TransactionResponse> getAllTransactions() {
@@ -27,37 +30,40 @@ public class TransactionService {
                 .toList();
     }
 
-    public TransactionResponse updateTransaction(Long id, TransactionEntity transactionEntity) {
-        return toResponse(transactionRepository.findById(id)
+    public TransactionResponse updateTransaction(String hashCode, TransactionResponse transactionResponse) {
+        return toResponse(transactionRepository.findByHashCode(hashCode)
                 .map(oldTransaction -> {
-                    oldTransaction.setTransaction_id(transactionEntity.getTransaction_id());
-                    oldTransaction.setTransactionDate(transactionEntity.getTransactionDate());
-                    oldTransaction.setTransactionCategory(transactionEntity.getTransactionCategory());
-                    oldTransaction.setTransactionValue(transactionEntity.getTransactionValue());
-                    oldTransaction.setExpense(transactionEntity.isExpense());
+                    oldTransaction.setTransactionDate(transactionResponse.getTransactionDate());
+                    oldTransaction.setTransactionCategory(transactionResponse.getTransactionCategory());
+                    oldTransaction.setTransactionValue(transactionResponse.getTransactionValue());
+                    oldTransaction.setExpense(transactionResponse.isExpense());
                     return transactionRepository.save(oldTransaction);
                 }).orElseGet(() -> {
-                    transactionEntity.setTransaction_id(id);
-                    return transactionRepository.save(transactionEntity);
+                    transactionResponse.setHashCode(hashCode);
+                    return transactionRepository.save(toEntity(transactionResponse));
                 }));
     }
 
-    public TransactionEntity createTransaction(TransactionEntity transactionEntity) {
+    public TransactionResponse createTransaction(TransactionResponse transactionResponse) {
         //obliczanie salda konta usera
-        return transactionRepository.save(transactionEntity);
+        TransactionEntity transactionEntity = toEntity(transactionResponse);
+        transactionEntity.setHashCode(hashingService.hash(transactionEntity.toString()));
+        transactionRepository.save(transactionEntity);
+
+        return transactionResponse;
     }
 
-    public TransactionResponse getTransaction(Long id) {
-        TransactionEntity transactionEntity = transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFoundException(id));
+    public TransactionResponse getTransaction(String hashCode) {
+        TransactionEntity transactionEntity = transactionRepository.findByHashCode(hashCode)
+                .orElseThrow(() -> new TransactionNotFoundException(hashCode));
 
         return toResponse(transactionEntity);
     }
 
-    public void deleteTransaction(Long id) {
-        if(transactionRepository.existsById(id))
-            transactionRepository.deleteById(id);
+    public void deleteTransaction(String hashCode) {
+        if(transactionRepository.existsByHashCode(hashCode))
+            transactionRepository.deleteByHashCode(hashCode);
         else
-            throw new TransactionNotFoundException(id);
+            throw new TransactionNotFoundException(hashCode);
     }
 }

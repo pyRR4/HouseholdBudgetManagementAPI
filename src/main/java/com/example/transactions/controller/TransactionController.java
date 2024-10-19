@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.transactions.controller.TransactionMapper.toEntity;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
@@ -31,33 +30,33 @@ public class TransactionController {
 
     @PostMapping("/transactions")
     public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionResponse transactionResponse) {
-        TransactionEntity savedTransactionEntity = transactionService.createTransaction(toEntity(transactionResponse));
+        TransactionResponse savedTransactionEntity = transactionService.createTransaction(transactionResponse);
         //zmienic na response i generowac kod do uri w response
         return ResponseEntity
                 .created(linkTo(methodOn(TransactionController.class)
-                        .getTransaction(savedTransactionEntity.getTransaction_id())).toUri())
+                        .getTransaction(savedTransactionEntity.getHashCode())).toUri())
                 .body(transactionResponse);
     }
 
-    @GetMapping("/transactions/{id}")
-    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable Long id) {
-        TransactionResponse transactionResponse = transactionService.getTransaction(id);
+    @GetMapping("/transactions/{hashCode}")
+    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable String hashCode) {
+        TransactionResponse transactionResponse = transactionService.getTransaction(hashCode);
 
         return ResponseEntity
                 .ok(transactionResponse);
     }
 
-    @PutMapping("/transactions/{id}")
-    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable Long id, @RequestBody TransactionEntity transactionEntity) {
-        TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(id, transactionEntity);
+    @PutMapping("/transactions/{hashCode}")
+    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String hashCode, @RequestBody TransactionResponse transactionResponse) {
+        TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(hashCode, transactionResponse);
 
         return ResponseEntity
                 .ok(updatedTransactionResponse);
     }
 
-    @DeleteMapping("/transactions/{id}")
-    public ResponseEntity<TransactionEntity> deleteTransaction(@PathVariable Long id) {
-        transactionService.deleteTransaction(id);
+    @DeleteMapping("/transactions/{hashCode}")
+    public ResponseEntity<TransactionEntity> deleteTransaction(@PathVariable String hashCode) {
+        transactionService.deleteTransaction(hashCode);
 
         return ResponseEntity.noContent().build();
     }

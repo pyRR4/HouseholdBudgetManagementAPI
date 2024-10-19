@@ -17,6 +17,7 @@ public class TransactionMapper {
         transactionEntity.setTransactionDate(transactionResponse.getTransactionDate());
         transactionEntity.setExpense(transactionResponse.isExpense());
         transactionEntity.setTransactionCategory(transactionResponse.getTransactionCategory());
+        transactionEntity.setHashCode(transactionResponse.getHashCode());
 
         return transactionEntity;
     }
