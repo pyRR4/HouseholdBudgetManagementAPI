@@ -21,6 +21,22 @@ public class TransactionResponse { //DTO class
         this.expense = expense;
         this.transactionCategory = transactionCategory;
     }
+
+    public TransactionResponse(double transactionValue, Date transactionDate, boolean expense, String transactionCategory, String hashCode) {
+        this(transactionValue, transactionDate, expense, transactionCategory);
+        this.hashCode = hashCode;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionResponse{" +
+                "transactionValue=" + transactionValue +
+                ", transactionDate=" + transactionDate +
+                ", expense=" + expense +
+                ", transactionCategory='" + transactionCategory + '\'' +
+                ", hashCode='" + hashCode + '\'' +
+                '}';
+    }
 }
 
 

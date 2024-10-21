@@ -64,19 +64,24 @@ public class TransactionEntity {
                 '}';
     }
 
-    public static void addCategory(String category) {
+    public static String addCategory(String category) {
         if(!categories.contains(category)) {
             categories.add(category.toUpperCase());
+            return "Added category: " + category;
         } else {
             //??
+
+            return "Failed to add category: " + category;
         }
     }
 
-    public static void removeCategory(String category) {
+    public static String removeCategory(String category) {
         if(categories.contains(category)) {
             categories.remove(category.toUpperCase());
+            return "Removed category: " + category;
         } else {
             //??
+            return "Failed to remove category: " + category;
         }
     }
 }
