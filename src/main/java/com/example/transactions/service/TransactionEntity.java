@@ -1,13 +1,12 @@
 package com.example.transactions.service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -19,16 +18,19 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transaction_id;
     private double transactionValue;
-    private Date transactionDate;
+    private LocalDateTime transactionDate;
     private boolean expense;
     private String transactionCategory;
     private String hashCode;
+    @ManyToOne
+    @JoinColumn(name = "username", referencedColumnName = "username")
+    private UserEntity user;
 
     private static final ArrayList<String> categories = new ArrayList<>(List.of("DEFAULT"));
 
     public TransactionEntity() {}
 
-    public TransactionEntity(double transactionValue, Date transactionDate, boolean expense, String transactionCategory) {
+    public TransactionEntity(double transactionValue, LocalDateTime transactionDate, boolean expense, String transactionCategory) {
         this.transactionValue = transactionValue;
         this.transactionDate = transactionDate;
         this.expense = expense;
@@ -54,34 +56,34 @@ public class TransactionEntity {
 
     @Override
     public String toString() {
-        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return "Transaction{" +
                 "id=" + transaction_id +
                 ", value=" + transactionValue +
-                ", date=" + df.format(transactionDate) +
+                ", date=" + transactionDate.format(formatter) +
                 ", isExpense=" + expense +
                 ", category='" + transactionCategory + '\'' +
                 '}';
     }
 
     public static String addCategory(String category) {
-        if(!categories.contains(category)) {
-            categories.add(category.toUpperCase());
-            return "Added category: " + category;
+        String upperCategory = category.toUpperCase();
+        if (!categories.contains(upperCategory)) {
+            categories.add(upperCategory);
+            return "Added category: " + upperCategory;
         } else {
-            //??
-
-            return "Failed to add category: " + category;
+            return "Failed to add category: " + upperCategory + " already exists.";
         }
     }
 
+
     public static String removeCategory(String category) {
-        if(categories.contains(category)) {
-            categories.remove(category.toUpperCase());
-            return "Removed category: " + category;
+        String upperCategory = category.toUpperCase();
+        if (categories.contains(upperCategory)) {
+            categories.remove(upperCategory);
+            return "Removed category: " + upperCategory;
         } else {
-            //??
-            return "Failed to remove category: " + category;
+            return "Failed to remove category: " + upperCategory + " does not exist.";
         }
     }
 }

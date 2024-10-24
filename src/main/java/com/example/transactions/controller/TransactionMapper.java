@@ -8,7 +8,8 @@ public class TransactionMapper {
                 transactionEntity.getTransactionDate(),
                 transactionEntity.isExpense(),
                 transactionEntity.getTransactionCategory(),
-                transactionEntity.getHashCode());
+                transactionEntity.getHashCode(),
+                transactionEntity.getUser());
     }
 
     public static TransactionEntity toEntity(TransactionResponse transactionResponse) {
@@ -19,6 +20,7 @@ public class TransactionMapper {
         transactionEntity.setExpense(transactionResponse.isExpense());
         transactionEntity.setTransactionCategory(transactionResponse.getTransactionCategory());
         transactionEntity.setHashCode(transactionResponse.getHashCode());
+        transactionEntity.setUser(transactionResponse.getUser());
 
         return transactionEntity;
     }

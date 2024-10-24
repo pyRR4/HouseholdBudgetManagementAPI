@@ -1,24 +1,25 @@
 package com.example.transactions.service;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
     private String username;
     private String password;
     private String nickname;
     private String email;
     private double balance;
+    @OneToMany(mappedBy = "user")
+    private List<TransactionEntity> transactions;
 
     public UserEntity() {}
 
@@ -27,6 +28,7 @@ public class UserEntity {
         this.password = password;
         this.nickname = nickname;
         this.email = email;
+        this.balance = 0;
     }
 
 }
