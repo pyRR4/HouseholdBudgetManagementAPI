@@ -1,4 +1,4 @@
-# API for Household Budget Management#
+# API for Household Budget Management
 
 **Status**: 🚧 *Work in Progress*  
 > *Please note: This project is still under development. As of now, only basic CRUD operations for transactions have been implemented.*
