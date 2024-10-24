@@ -38,10 +38,7 @@ public class TransactionService {
                     oldTransaction.setTransactionValue(transactionResponse.getTransactionValue());
                     oldTransaction.setExpense(transactionResponse.isExpense());
                     return transactionRepository.save(oldTransaction);
-                }).orElseGet(() -> {
-                    transactionResponse.setHashCode(hashCode);
-                    return transactionRepository.save(toEntity(transactionResponse));
-                }));
+                }).orElseThrow(() -> new TransactionNotFoundException(hashCode)));
     }
 
     public TransactionResponse createTransaction(TransactionResponse transactionResponse) {
