@@ -15,3 +15,14 @@ This project is a simple financial management API that allows users to manage th
 * Setting and monitoring savings goals
 * User authentication and authorization with JWT
 * Secure access to user-specific data
+
+
+## To-Do's
+
+* Users CRUD
+* Users authentication
+* Transactions filtering
+* Savings goals feature
+* Monthly reports endpoint
+* Front-end dashboard (optional)
+
