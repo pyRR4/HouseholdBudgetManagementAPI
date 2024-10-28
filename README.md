@@ -19,7 +19,6 @@ This project is a simple financial management API that allows users to manage th
 
 ## To-Do's
 
-* Users CRUD
 * Users authentication
 * Transactions filtering
 * Savings goals feature
