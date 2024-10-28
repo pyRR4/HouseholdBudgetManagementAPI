@@ -20,8 +20,10 @@ This project is a simple financial management API that allows users to manage th
 ## To-Do's
 
 * Users authentication
+* Create categories entity
 * Transactions filtering
 * Savings goals feature
 * Monthly reports endpoint
+* Move database to PostgreSQL
 * Front-end dashboard (optional)
 
