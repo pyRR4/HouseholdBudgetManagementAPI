@@ -20,6 +20,7 @@ This project is a simple financial management API that allows users to manage th
 ## To-Do's
 
 * Users authentication
+* Add custom validator
 * Create categories entity
 * Transactions filtering
 * Savings goals feature
