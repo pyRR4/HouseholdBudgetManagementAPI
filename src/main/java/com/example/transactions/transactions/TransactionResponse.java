@@ -1,6 +1,7 @@
-package com.example.transactions.controller;
+package com.example.transactions.transactions;
 
-import com.example.transactions.service.UserEntity;
+import com.example.transactions.categories.CategoryEntity;
+import com.example.transactions.users.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,11 +13,11 @@ public class TransactionResponse { //DTO class
     private double transactionValue;
     private LocalDateTime transactionDate;
     private boolean expense;
-    private String transactionCategory;
+    private CategoryEntity transactionCategory;
     private String hashCode;
     private UserEntity user;
 
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, String transactionCategory, UserEntity user) {
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, UserEntity user) {
         this.transactionValue = transactionValue;
         this.transactionDate = transactionDate;
         this.expense = expense;
@@ -24,7 +25,7 @@ public class TransactionResponse { //DTO class
         this.user = user;
     }
 
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, String transactionCategory, String hashCode, UserEntity user) {
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, String hashCode, UserEntity user) {
         this(transactionValue, transactionDate, expense, transactionCategory, user);
         this.hashCode = hashCode;
     }

@@ -1,4 +1,4 @@
-package com.example.transactions.service;
+package com.example.transactions;
 
 import org.springframework.stereotype.Service;
 

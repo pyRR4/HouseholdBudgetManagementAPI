@@ -1,6 +1,4 @@
-package com.example.transactions.controller;
-
-import com.example.transactions.service.TransactionEntity;
+package com.example.transactions.transactions;
 
 public class TransactionMapper {
     public static TransactionResponse toResponse(TransactionEntity transactionEntity) {

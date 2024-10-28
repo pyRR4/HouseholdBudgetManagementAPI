@@ -1,16 +1,16 @@
-package com.example.transactions.service;
+package com.example.transactions.transactions;
 
-import com.example.transactions.controller.TransactionMapper;
-import com.example.transactions.controller.TransactionResponse;
+import com.example.transactions.HashingService;
+import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.exceptions.TransactionNotFoundException;
-import com.example.transactions.repository.TransactionRepository;
+import com.example.transactions.users.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.transactions.controller.TransactionMapper.toEntity;
-import static com.example.transactions.controller.TransactionMapper.toResponse;
+import static com.example.transactions.transactions.TransactionMapper.toEntity;
+import static com.example.transactions.transactions.TransactionMapper.toResponse;
 
 @Service
 public class TransactionService {
@@ -55,6 +55,18 @@ public class TransactionService {
                 .orElseThrow(() -> new TransactionNotFoundException(hashCode));
 
         return toResponse(transactionEntity);
+    }
+
+    public List<TransactionResponse> getTransactionsByCategory(CategoryEntity category) {
+        return transactionRepository.findAllByCategory(category).stream()
+                .map(TransactionMapper::toResponse)
+                .toList();
+    }
+
+    public List<TransactionResponse> getTransactionsByUser(UserEntity user) {
+        return transactionRepository.findAllByUser(user).stream()
+                .map(TransactionMapper::toResponse)
+                .toList();
     }
 
     public void deleteTransaction(String hashCode) {

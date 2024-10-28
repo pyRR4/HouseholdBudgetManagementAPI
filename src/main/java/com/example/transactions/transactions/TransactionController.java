@@ -1,7 +1,5 @@
-package com.example.transactions.controller;
+package com.example.transactions.transactions;
 
-import com.example.transactions.service.TransactionEntity;
-import com.example.transactions.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

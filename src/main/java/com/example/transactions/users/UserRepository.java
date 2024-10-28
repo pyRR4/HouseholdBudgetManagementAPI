@@ -1,6 +1,5 @@
-package com.example.transactions.repository;
+package com.example.transactions.users;
 
-import com.example.transactions.service.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

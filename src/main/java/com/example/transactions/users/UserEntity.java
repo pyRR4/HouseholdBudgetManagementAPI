@@ -1,5 +1,6 @@
-package com.example.transactions.service;
+package com.example.transactions.users;
 
+import com.example.transactions.transactions.TransactionEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;

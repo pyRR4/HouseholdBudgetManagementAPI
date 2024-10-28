@@ -1,8 +1,7 @@
-package com.example.transactions.service;
+package com.example.transactions.users;
 
 import com.example.transactions.exceptions.UserAlreadyExistsException;
 import com.example.transactions.exceptions.UserNotFoundException;
-import com.example.transactions.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
