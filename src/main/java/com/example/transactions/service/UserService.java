@@ -1,8 +1,8 @@
 package com.example.transactions.service;
 
+import com.example.transactions.exceptions.UserAlreadyExistsException;
 import com.example.transactions.exceptions.UserNotFoundException;
 import com.example.transactions.repository.UserRepository;
-import org.hibernate.service.UnknownServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,9 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
+        if(userRepository.existsByUsername(user.getUsername())) {
+            throw new UserAlreadyExistsException(user.getUsername());
+        }
         return userRepository.save(user);
     }
 
@@ -38,6 +41,9 @@ public class UserService {
     }
 
     public void deleteUser(String username) {
+        if(!userRepository.existsByUsername(username)) {
+            throw new UserNotFoundException(username);
+        }
         userRepository.deleteByUsername(username);
     }
 }
