@@ -1,9 +1,7 @@
 package com.example.transactions.users;
 
 import com.example.transactions.transactions.TransactionEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +10,23 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email", "username"}))
 public class UserEntity {
     @Id
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String nickname;
+
+    @Column(nullable = false)
     private String email;
+
     private double balance;
+
     @OneToMany(mappedBy = "user")
     private List<TransactionEntity> transactions;
 

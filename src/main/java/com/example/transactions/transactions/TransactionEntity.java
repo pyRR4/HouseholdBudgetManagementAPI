@@ -14,17 +14,28 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"hashCode"}))
 public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
+
+    @Column(nullable = false)
     private double transactionValue;
+
+    @Column(nullable = false)
     private LocalDateTime transactionDate;
+
+    @Column(nullable = false)
     private boolean expense;
+
     @ManyToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
     private CategoryEntity transactionCategory;
+
+    @Column(nullable = false)
     private String hashCode;
+
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username")
     private UserEntity user;

@@ -10,11 +10,13 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
     @OneToMany(mappedBy = "transactionCategory")
     private List<TransactionEntity> transactions;
