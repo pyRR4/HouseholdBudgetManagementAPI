@@ -34,6 +34,17 @@ public class TransactionController {
                 .ok(transactions);
     }
 
+    @GetMapping("/transactions/{user}/{category}")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsByUserAndCategory(
+            @PathVariable String user,
+            @PathVariable String category
+    ) {
+        List<TransactionResponse> transactions = transactionService.getTransactionsByUserAndCategory(user, category);
+
+        return ResponseEntity
+                .ok(transactions);
+    }
+
     @PostMapping("/transactions")
     public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionResponse transactionResponse) {
         TransactionResponse savedTransactionEntity = transactionService.createTransaction(transactionResponse);

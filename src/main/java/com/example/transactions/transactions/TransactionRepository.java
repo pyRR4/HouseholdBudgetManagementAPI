@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
     Optional<TransactionEntity> findByHashCode(String hashCode);
     Optional<TransactionEntity> findAllByUser(UserEntity user);
-    Optional<TransactionEntity> findAllByCategory(CategoryEntity category);
+    Optional<TransactionEntity> findAllByCategoryAndUser(CategoryEntity category, UserEntity user);
 
     boolean existsByHashCode(String hashCode);
 

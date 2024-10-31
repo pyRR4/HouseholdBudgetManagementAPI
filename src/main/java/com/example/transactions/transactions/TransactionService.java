@@ -2,6 +2,7 @@ package com.example.transactions.transactions;
 
 import com.example.transactions.HashingService;
 import com.example.transactions.categories.CategoryEntity;
+import com.example.transactions.categories.CategoryService;
 import com.example.transactions.exceptions.TransactionNotFoundException;
 import com.example.transactions.users.UserEntity;
 import com.example.transactions.users.UserService;
@@ -19,13 +20,21 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
 
     private final UserService userService;
+    private final CategoryService categoryService;
+
     private final HashingService hashingService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, HashingService hashingService, UserService userService) {
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            HashingService hashingService,
+            UserService userService,
+            CategoryService categoryService
+    ) {
         this.transactionRepository = transactionRepository;
         this.hashingService = hashingService;
         this.userService = userService;
+        this.categoryService = categoryService;
     }
 
     public List<TransactionResponse> getAllTransactions() {
@@ -61,8 +70,12 @@ public class TransactionService {
         return toResponse(transactionEntity);
     }
 
-    public List<TransactionResponse> getTransactionsByCategory(CategoryEntity category) {
-        return transactionRepository.findAllByCategory(category).stream()
+    public List<TransactionResponse> getTransactionsByUserAndCategory(String username, String category) {
+        UserEntity userEntity = userService.getUserByUsername(username);
+        CategoryEntity categoryEntity = categoryService.getCategoryByName(category);
+
+
+        return transactionRepository.findAllByCategoryAndUser(categoryEntity, userEntity).stream()
                 .map(TransactionMapper::toResponse)
                 .toList();
     }
