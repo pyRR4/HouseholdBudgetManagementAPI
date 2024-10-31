@@ -21,7 +21,6 @@ This project is a simple financial management API that allows users to manage th
 
 * Add custom validator
 * Ensure data integrity
-* Create categories entity
 * Transactions filtering
 * Savings goals feature
 * Think about layers in project
