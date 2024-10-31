@@ -4,6 +4,7 @@ import com.example.transactions.HashingService;
 import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.exceptions.TransactionNotFoundException;
 import com.example.transactions.users.UserEntity;
+import com.example.transactions.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,15 @@ import static com.example.transactions.transactions.TransactionMapper.toResponse
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+
+    private final UserService userService;
     private final HashingService hashingService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, HashingService hashingService) {
+    public TransactionService(TransactionRepository transactionRepository, HashingService hashingService, UserService userService) {
         this.transactionRepository = transactionRepository;
         this.hashingService = hashingService;
+        this.userService = userService;
     }
 
     public List<TransactionResponse> getAllTransactions() {
@@ -63,8 +67,8 @@ public class TransactionService {
                 .toList();
     }
 
-    public List<TransactionResponse> getTransactionsByUser(UserEntity user) {
-        return transactionRepository.findAllByUser(user).stream()
+    public List<TransactionResponse> getTransactionsByUser(String username) {
+        return transactionRepository.findAllByUser(userService.getUserByUsername(username)).stream()
                 .map(TransactionMapper::toResponse)
                 .toList();
     }

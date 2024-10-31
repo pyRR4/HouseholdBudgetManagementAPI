@@ -26,6 +26,14 @@ public class TransactionController {
                 .ok(transactions);
     }
 
+    @GetMapping("/transactions/{user}")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsByUser(@PathVariable String user) {
+        List<TransactionResponse> transactions = transactionService.getTransactionsByUser(user);
+
+        return ResponseEntity
+                .ok(transactions);
+    }
+
     @PostMapping("/transactions")
     public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionResponse transactionResponse) {
         TransactionResponse savedTransactionEntity = transactionService.createTransaction(transactionResponse);
