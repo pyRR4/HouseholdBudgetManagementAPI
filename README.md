@@ -1,7 +1,7 @@
 # API for Household Budget Management
 
 **Status**: 🚧 *Work in Progress*  
-> *Please note: This project is still under development. As of now, only basic CRUD operations for transactions have been implemented.*
+> *Please note: This project is still under development. As of now, only basic CRUD operations for transactions, users and categories have been implemented.*
 
 
 
@@ -20,6 +20,7 @@ This project is a simple financial management API that allows users to manage th
 ## To-Do's
 
 * Add custom validator
+* CSRF security
 * Ensure data integrity
 * Transactions filtering
 * Savings goals feature
