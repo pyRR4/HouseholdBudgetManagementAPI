@@ -5,7 +5,7 @@ public class TransactionMapper {
         return new TransactionResponse(transactionEntity.getTransactionValue(),
                 transactionEntity.getTransactionDate(),
                 transactionEntity.isExpense(),
-                transactionEntity.getTransactionCategory(),
+                transactionEntity.getCategory(),
                 transactionEntity.getHashCode(),
                 transactionEntity.getUser());
     }
@@ -16,7 +16,7 @@ public class TransactionMapper {
         transactionEntity.setTransactionValue(transactionResponse.getTransactionValue());
         transactionEntity.setTransactionDate(transactionResponse.getTransactionDate());
         transactionEntity.setExpense(transactionResponse.isExpense());
-        transactionEntity.setTransactionCategory(transactionResponse.getTransactionCategory());
+        transactionEntity.setCategory(transactionResponse.getTransactionCategory());
         transactionEntity.setHashCode(transactionResponse.getHashCode());
         transactionEntity.setUser(transactionResponse.getUser());
 

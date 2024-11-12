@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -18,27 +20,27 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/{category}")
-    public ResponseEntity<CategoryEntity> getCategory(@PathVariable String category) {
-        CategoryEntity categoryEntity = categoryService.getCategoryByName(category);
+    @GetMapping("/{username}/categories")
+    public ResponseEntity<List<CategoryEntity>> getUserCategories(@PathVariable String username) {
+        List<CategoryEntity> categoryEntity = categoryService.getCategoriesByUsername(username);
 
         return ResponseEntity
                 .ok(categoryEntity);
     }
 
-    @PostMapping("/category")
-    public ResponseEntity<CategoryEntity> addCategory(@RequestBody CategoryEntity category) {
-        CategoryEntity categoryEntity = categoryService.createCategory(category);
+    @PostMapping("/{username}/new_category")
+    public ResponseEntity<CategoryEntity> addCategory(@PathVariable String username, @RequestParam String category) {
+        CategoryEntity categoryEntity = categoryService.createCategory(category, username);
 
         return ResponseEntity
                 .created(linkTo(methodOn(CategoryController.class)
-                        .getCategory(categoryEntity.getName())).toUri())
+                        .getUserCategories(categoryEntity.getUser().getUsername())).toUri())
                 .body(categoryEntity);
     }
 
-    @DeleteMapping("/{category}")
-    public ResponseEntity<CategoryEntity> deleteCategory(@PathVariable String category) {
-        categoryService.deleteCategory(category);
+    @DeleteMapping("/{username}/{category}")
+    public ResponseEntity<CategoryEntity> deleteCategory(@PathVariable String username, @PathVariable String category) {
+        categoryService.deleteCategory(username, category);
 
         return ResponseEntity.noContent().build();
     }

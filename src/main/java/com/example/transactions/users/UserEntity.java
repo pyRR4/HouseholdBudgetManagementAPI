@@ -1,6 +1,8 @@
 package com.example.transactions.users;
 
+import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.transactions.TransactionEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +29,13 @@ public class UserEntity {
 
     private double balance;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<TransactionEntity> transactions;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<CategoryEntity> categories;
 
     public UserEntity() {}
 

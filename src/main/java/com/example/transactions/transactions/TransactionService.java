@@ -8,6 +8,7 @@ import com.example.transactions.users.UserEntity;
 import com.example.transactions.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static com.example.transactions.transactions.TransactionMapper.toEntity;
 import static com.example.transactions.transactions.TransactionMapper.toResponse;
 
 @Service
+@Transactional
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
@@ -47,7 +49,7 @@ public class TransactionService {
         return toResponse(transactionRepository.findByHashCode(hashCode)
                 .map(oldTransaction -> {
                     oldTransaction.setTransactionDate(transactionResponse.getTransactionDate());
-                    oldTransaction.setTransactionCategory(transactionResponse.getTransactionCategory());
+                    oldTransaction.setCategory(transactionResponse.getTransactionCategory());
                     oldTransaction.setTransactionValue(transactionResponse.getTransactionValue());
                     oldTransaction.setExpense(transactionResponse.isExpense());
                     return transactionRepository.save(oldTransaction);
@@ -72,7 +74,7 @@ public class TransactionService {
 
     public List<TransactionResponse> getTransactionsByUserAndCategory(String username, String category) {
         UserEntity userEntity = userService.getUserByUsername(username);
-        CategoryEntity categoryEntity = categoryService.getCategoryByName(category);
+        CategoryEntity categoryEntity = categoryService.getCategoryByUsernameAndName(username, category);
 
 
         return transactionRepository.findAllByCategoryAndUser(categoryEntity, userEntity).stream()

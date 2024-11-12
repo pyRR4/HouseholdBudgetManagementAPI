@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Testowanie API - users</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .container { margin-bottom: 20px; }
+            .output { background-color: #f2f2f2; padding: 10px; border: 1px solid #ddd; margin-top: 10px; }
+            label, input, button { display: block; margin-bottom: 5px; }
+        </style>
+    </head>
+    <body>
+        <h1>Testowanie endpointów API</h1>
+
+        <!-- GET User by Username -->
+        <div class="container">
+            <h2>Pobierz użytkownika (GET)</h2>
+            <form method="get" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="getUsername">Username:</label>
+                <input type="text" id="getUsername">
+            </form>
+            <button onclick="getUser()">Pobierz użytkownika</button>
+            <div id="getUserOutput" class="output"></div>
+        </div>
+
+        <!-- Create New User -->
+        <div class="container">
+            <h2>Utwórz nowego użytkownika (POST)</h2>
+            <form method="post" action="/new_user">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="newUsername">Username:</label>
+                <input type="text" id="newUsername">
+                <label for="newPassword">Password:</label>
+                <input type="text" id="newPassword">
+                <label for="newNickname">Nickname:</label>
+                <input type="text" id="newNickname">
+                <label for="newEmail">Email:</label>
+                <input type="email" id="newEmail">
+                <label for="newBalance">Balance:</label>
+                <input type="number" step="0.01" id="newBalance">
+            </form>
+
+            <button onclick="createUser()">Utwórz użytkownika</button>
+            <div id="createUserOutput" class="output"></div>
+        </div>
+
+        <!-- Update User -->
+        <div class="container">
+            <h2>Zaktualizuj użytkownika (PUT)</h2>
+            <form method="post" action="/static">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="updateUsername">Username (do aktualizacji):</label>
+                <input type="text" id="updateUsername">
+                <label for="updatedPassword">Nowe hasło:</label>
+                <input type="text" id="updatedPassword">
+                <label for="updatedNickname">Nowy nickname:</label>
+                <input type="text" id="updatedNickname">
+                <label for="updatedEmail">Nowy email:</label>
+                <input type="email" id="updatedEmail">
+                <label for="updatedBalance">Nowe saldo:</label>
+                <input type="number" step="0.01" id="updatedBalance">
+            </form>
+
+            <button onclick="updateUser()">Zaktualizuj użytkownika</button>
+            <div id="updateUserOutput" class="output"></div>
+        </div>
+
+        <!-- Delete User -->
+        <div class="container">
+            <h2>Usuń użytkownika (DELETE)</h2>
+            <form method="post" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="deleteUsername">Username (do usunięcia):</label>
+                <input type="text" id="deleteUsername">
+            </form>
+            <button onclick="deleteUser()">Usuń użytkownika</button>
+            <div id="deleteUserOutput" class="output"></div>
+        </div>
+
+        <script>
+            const baseUrl = 'http://localhost:8080';
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            async function getUser() {
+                const username = document.getElementById('getUsername').value;
+                const response = await fetch(`${baseUrl}/user=${username}`);
+                const data = await response.json();
+                document.getElementById('getUserOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function createUser() {
+                const user = {
+                    username: document.getElementById('newUsername').value,
+                    password: document.getElementById('newPassword').value,
+                    nickname: document.getElementById('newNickname').value,
+                    email: document.getElementById('newEmail').value,
+                    balance: parseFloat(document.getElementById('newBalance').value)
+                };
+                const response = await fetch(`${baseUrl}/new_user`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(user)
+                });
+                const data = await response.json();
+                document.getElementById('createUserOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function updateUser() {
+                const username = document.getElementById('updateUsername').value;
+                const user = {
+                    username: username,
+                    password: document.getElementById('updatedPassword').value,
+                    nickname: document.getElementById('updatedNickname').value,
+                    email: document.getElementById('updatedEmail').value,
+                    balance: parseFloat(document.getElementById('updatedBalance').value)
+                };
+                const response = await fetch(`${baseUrl}/user=${username}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(user)
+                });
+                const data = await response.json();
+                document.getElementById('updateUserOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function deleteUser() {
+                const username = document.getElementById('deleteUsername').value;
+                const response = await fetch(`${baseUrl}/user=${username}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }, });
+                document.getElementById('deleteUserOutput').innerText =
+                    response.ok ? 'Użytkownik usunięty' : 'Błąd przy usuwaniu użytkownika';
+            }
+        </script>
+    </body>
+</html>

@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/user={username}")
     public ResponseEntity<UserEntity> getUser(@PathVariable String username) {
         UserEntity user = userService.getUserByUsername(username);
 
@@ -36,7 +36,7 @@ public class UserController {
                 .body(userEntity);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/user={username}")
     public ResponseEntity<UserEntity> updateUser(@PathVariable String username, @RequestBody UserEntity user) {
         UserEntity userEntity = userService.updateUser(username, user);
 
@@ -44,7 +44,7 @@ public class UserController {
                 .ok(userEntity);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/user={username}")
     public ResponseEntity<UserEntity> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
 

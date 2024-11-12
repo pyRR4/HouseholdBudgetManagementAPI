@@ -31,7 +31,7 @@ public class TransactionEntity {
 
     @ManyToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private CategoryEntity transactionCategory;
+    private CategoryEntity category;
 
     @Column(nullable = false)
     private String hashCode;
@@ -62,7 +62,7 @@ public class TransactionEntity {
                 ", value=" + transactionValue +
                 ", date=" + transactionDate.format(formatter) +
                 ", isExpense=" + expense +
-                ", category='" + transactionCategory + '\'' +
+                ", category='" + category + '\'' +
                 '}';
     }
 }

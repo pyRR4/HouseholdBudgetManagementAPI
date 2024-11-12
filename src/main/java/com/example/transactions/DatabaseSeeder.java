@@ -3,6 +3,7 @@ package com.example.transactions;
 
 import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.categories.CategoryService;
+import com.example.transactions.exceptions.CategoryAlredyExistsException;
 import com.example.transactions.transactions.TransactionResponse;
 import com.example.transactions.transactions.TransactionService;
 import com.example.transactions.users.UserEntity;
@@ -14,9 +15,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Configuration
 public class DatabaseSeeder implements CommandLineRunner {
@@ -36,7 +39,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         UserEntity user = createUser();
-        List<CategoryEntity> categories = seedCategories();
+        List<CategoryEntity> categories = seedCategoriesForUser(user.getUsername());
         seedTransactions(user, categories);
     }
 
@@ -45,18 +48,31 @@ public class DatabaseSeeder implements CommandLineRunner {
         return userService.createUser(user);
     }
 
-    private List<CategoryEntity> seedCategories() {
+    private List<CategoryEntity> seedCategoriesForUser(String username) {
         log.info("Seeding categories...");
 
-        List<CategoryEntity> categories = Arrays.asList(
-                new CategoryEntity("Food"),
-                new CategoryEntity("Transport"),
-                new CategoryEntity("Entertainment"),
-                new CategoryEntity("Other")
-        );
+        List<CategoryEntity> seededCategories = new ArrayList<>();
+        List<String> categoryNames = Arrays.asList("Food", "Transport", "Entertainment", "Other");
 
-        categories.forEach(categoryService::createCategory); // Zapisz każdą kategorię do bazy
-        return categories;
+        for (String categoryName : categoryNames) {
+            try {
+                CategoryEntity category = categoryService.createCategory(categoryName, username);
+                seededCategories.add(category); // Dodajemy tylko pomyślnie stworzone kategorie
+            } catch (CategoryAlredyExistsException e) {
+                log.warn("Category '{}' already exists for user '{}'", categoryName, username);
+            }
+        }
+
+        if (!seededCategories.isEmpty()) {
+            log.info("Successfully added categories for user '{}': {}", username,
+                    seededCategories.stream()
+                            .map(CategoryEntity::getName)
+                            .collect(Collectors.joining(", ")));
+        } else {
+            log.info("No new categories were added for user '{}'", username);
+        }
+
+        return seededCategories;
     }
 
     private void seedTransactions(UserEntity user, List<CategoryEntity> categories) {
