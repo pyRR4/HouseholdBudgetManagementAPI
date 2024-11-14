@@ -18,9 +18,9 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/users/{user}/transactions")
-    public ResponseEntity<List<TransactionResponse>> getTransactionsByUser(@PathVariable String user) {
-        List<TransactionResponse> transactions = transactionService.getTransactionsByUser(user);
+    @GetMapping("/users/{username}/transactions")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsByUser(@PathVariable String username) {
+        List<TransactionResponse> transactions = transactionService.getTransactionsByUser(username);
 
         return ResponseEntity
                 .ok(transactions);
@@ -39,7 +39,7 @@ public class TransactionController {
 
     @PostMapping("/users/{username}/transactions") //TODO
     public ResponseEntity<TransactionResponse> createTransaction(@PathVariable String username, @RequestBody TransactionResponse transactionResponse) {
-        TransactionResponse savedTransactionEntity = transactionService.createTransaction(transactionResponse);
+        TransactionResponse savedTransactionEntity = transactionService.createTransaction(username, transactionResponse);
         //zmienic na response i generowac kod do uri w response
         return ResponseEntity
                 .created(linkTo(methodOn(TransactionController.class)
@@ -47,25 +47,25 @@ public class TransactionController {
                 .body(transactionResponse);
     }
 
-    @GetMapping("/users/{username}/transactions/{hashCode}") //TODO
+    @GetMapping("/users/{username}/transactions/{hashCode}")
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable String username, @PathVariable String hashCode) {
-        TransactionResponse transactionResponse = transactionService.getTransaction(hashCode);
+        TransactionResponse transactionResponse = transactionService.getTransaction(username, hashCode);
 
         return ResponseEntity
                 .ok(transactionResponse);
     }
 
-    @PutMapping("/users/{username}/transactions/{hashCode}") //TODO
+    @PutMapping("/users/{username}/transactions/{hashCode}")
     public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String username, @PathVariable String hashCode, @RequestBody TransactionResponse transactionResponse) {
-        TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(hashCode, transactionResponse);
+        TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(username, hashCode, transactionResponse);
 
         return ResponseEntity
                 .ok(updatedTransactionResponse);
     }
 
-    @DeleteMapping("/users/{username}/transactions/{hashCode}") //TODO
+    @DeleteMapping("/users/{username}/transactions/{hashCode}")
     public ResponseEntity<TransactionEntity> deleteTransaction(@PathVariable String username, @PathVariable String hashCode) {
-        transactionService.deleteTransaction(hashCode);
+        transactionService.deleteTransaction(username, hashCode);
 
         return ResponseEntity.noContent().build();
     }

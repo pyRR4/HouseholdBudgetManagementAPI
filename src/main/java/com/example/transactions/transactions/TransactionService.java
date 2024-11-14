@@ -39,14 +39,8 @@ public class TransactionService {
         this.categoryService = categoryService;
     }
 
-    public List<TransactionResponse> getAllTransactions() {
-        return transactionRepository.findAll().stream()
-                .map(TransactionMapper::toResponse)
-                .toList();
-    }
-
-    public TransactionResponse updateTransaction(String hashCode, TransactionResponse transactionResponse) {
-        return toResponse(transactionRepository.findByHashCode(hashCode)
+    public TransactionResponse updateTransaction(String username, String hashCode, TransactionResponse transactionResponse) {
+        return toResponse(transactionRepository.findByUserUsernameAndHashCode(username, hashCode)
                 .map(oldTransaction -> {
                     oldTransaction.setTransactionDate(transactionResponse.getTransactionDate());
                     oldTransaction.setCategory(transactionResponse.getTransactionCategory());
@@ -56,41 +50,39 @@ public class TransactionService {
                 }).orElseThrow(() -> new TransactionNotFoundException(hashCode)));
     }
 
-    public TransactionResponse createTransaction(TransactionResponse transactionResponse) {
+    public TransactionResponse createTransaction(String username, TransactionResponse transactionResponse) {
         //obliczanie salda konta usera
         TransactionEntity transactionEntity = toEntity(transactionResponse);
+        transactionEntity.setUser(userService.getUserByUsername(username));
         transactionEntity.setHashCode(hashingService.hash(transactionEntity.toString()));
+        transactionResponse.setHashCode(transactionEntity.getHashCode());
         transactionRepository.save(transactionEntity);
 
         return transactionResponse;
     }
 
-    public TransactionResponse getTransaction(String hashCode) {
-        TransactionEntity transactionEntity = transactionRepository.findByHashCode(hashCode)
+    public TransactionResponse getTransaction(String username, String hashCode) {
+        TransactionEntity transactionEntity = transactionRepository.findByUserUsernameAndHashCode(username, hashCode)
                 .orElseThrow(() -> new TransactionNotFoundException(hashCode));
 
         return toResponse(transactionEntity);
     }
 
     public List<TransactionResponse> getTransactionsByUserAndCategory(String username, String category) {
-        UserEntity userEntity = userService.getUserByUsername(username);
-        CategoryEntity categoryEntity = categoryService.getCategoryByUsernameAndName(username, category);
-
-
-        return transactionRepository.findAllByCategoryAndUser(categoryEntity, userEntity).stream()
+        return transactionRepository.findAllByCategoryNameAndUserUsername(category, username).stream()
                 .map(TransactionMapper::toResponse)
                 .toList();
     }
 
     public List<TransactionResponse> getTransactionsByUser(String username) {
-        return transactionRepository.findAllByUser(userService.getUserByUsername(username)).stream()
+        return transactionRepository.findAllByUserUsername(username).stream()
                 .map(TransactionMapper::toResponse)
                 .toList();
     }
 
-    public void deleteTransaction(String hashCode) {
-        if(transactionRepository.existsByHashCode(hashCode))
-            transactionRepository.deleteByHashCode(hashCode);
+    public void deleteTransaction(String username, String hashCode) {
+        if(transactionRepository.existsByUserUsernameAndHashCode(username, hashCode))
+            transactionRepository.deleteByUserUsernameAndHashCode(username, hashCode);
         else
             throw new TransactionNotFoundException(hashCode);
     }

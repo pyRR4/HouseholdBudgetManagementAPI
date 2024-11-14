@@ -15,18 +15,18 @@ public class TransactionResponse { //DTO class
     private boolean expense;
     private CategoryEntity transactionCategory;
     private String hashCode;
-    private UserEntity user;
 
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, UserEntity user) {
+    public TransactionResponse() {}
+
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory) {
         this.transactionValue = transactionValue;
         this.transactionDate = transactionDate;
         this.expense = expense;
         this.transactionCategory = transactionCategory;
-        this.user = user;
     }
 
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, String hashCode, UserEntity user) {
-        this(transactionValue, transactionDate, expense, transactionCategory, user);
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, String hashCode) {
+        this(transactionValue, transactionDate, expense, transactionCategory);
         this.hashCode = hashCode;
     }
 
@@ -38,7 +38,6 @@ public class TransactionResponse { //DTO class
                 ", expense=" + expense +
                 ", transactionCategory='" + transactionCategory + '\'' +
                 ", hashCode='" + hashCode +
-                ", user=" + user + '\'' +
                 '}';
     }
 }

@@ -84,12 +84,12 @@
         </div>
 
         <script>
-            const baseUrl = 'http://localhost:8080';
+            const baseUrl = 'http://localhost:8080/users';
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
             async function getUser() {
                 const username = document.getElementById('getUsername').value;
-                const response = await fetch(`${baseUrl}/users/${username}`);
+                const response = await fetch(`${baseUrl}/${username}`);
                 const data = await response.json();
                 document.getElementById('getUserOutput').innerText = JSON.stringify(data, null, 2);
             }
@@ -102,7 +102,7 @@
                     email: document.getElementById('newEmail').value,
                     balance: parseFloat(document.getElementById('newBalance').value)
                 };
-                const response = await fetch(`${baseUrl}/new_user`, {
+                const response = await fetch(`${baseUrl}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -123,7 +123,7 @@
                     email: document.getElementById('updatedEmail').value,
                     balance: parseFloat(document.getElementById('updatedBalance').value)
                 };
-                const response = await fetch(`${baseUrl}/users/${username}`, {
+                const response = await fetch(`${baseUrl}/${username}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -137,7 +137,7 @@
 
             async function deleteUser() {
                 const username = document.getElementById('deleteUsername').value;
-                const response = await fetch(`${baseUrl}/users/${username}`, {
+                const response = await fetch(`${baseUrl}/${username}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

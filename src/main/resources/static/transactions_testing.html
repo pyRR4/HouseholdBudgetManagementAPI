@@ -1,10 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Testowanie API - transactions</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Testowanie API - Categories</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .container { margin-bottom: 20px; }
+            .output { background-color: #f2f2f2; padding: 10px; border: 1px solid #ddd; margin-top: 10px; }
+            label, input, button { display: block; margin-bottom: 5px; }
+        </style>
+    </head>
+    <body>
+        <h1>Testowanie endpointów API - Transactions</h1>
 
-</body>
+        <!-- GET TRANSACTIONS BY USERNAME -->
+        <div class="container">
+            <h2>Pobierz transakcje użytkownika (GET)</h2>
+            <form method="get" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="getUserTransactions">Username:</label>
+                <input type="text" id="getUserTransactions">
+            </form>
+            <button onclick="getTransactionsByUser()">Pobierz transakcje</button>
+            <div id="getUserTransactionsOutput" class="output"></div>
+        </div>
+
+        <!-- GET TRANSACTIONS BY USERNAME AND CATEGORY -->
+        <div class="container">
+            <h2>Pobierz transakcje o wybranej kategorii (GET)</h2>
+            <form method="get" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="getUsernameCategory">Username:</label>
+                <input type="text" id="getUsernameCategory">
+
+                <label for="getCategory">Category:</label>
+                <input type="text" id="getCategory">
+            </form>
+            <button onclick="getTransactionsByUserAndCategory()">Pobierz użytkownika</button>
+            <div id="getUserCategoryTransactionsOutput" class="output"></div>
+        </div>
+
+        <!-- GET TRANSACTION BY USERNAME AND HASHCODE -->
+        <div class="container">
+            <h2>Pobierz transakcje użytkownika o kodzie (GET)</h2>
+            <form method="get" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="getUsernameTransaction">Username:</label>
+                <input type="text" id="getUsernameTransaction" name="username">
+
+                <label for="getTransactionHashCode">Transaction HashCode:</label>
+                <input type="text" id="getTransactionHashCode" name="hashCode">
+
+                <button type="button" onclick="getTransaction()">Pobierz transakcję</button>
+            </form>
+            <div id="getTransactionOutput" class="output"></div>
+        </div>
+
+        <!-- ADD TRANSACTION FOR USER -->
+        <div class="container">
+            <h2>Utwórz nową transakcję (POST)</h2>
+            <form method="post" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="createUsername">Username:</label>
+                <input type="text" id="createUsername" name="username">
+
+                <label for="transactionAmount">Amount:</label>
+                <input type="number" step="0.01" id="transactionAmount" name="amount">
+
+                <label>Is Expense:</label>
+                <label><input type="radio" id="isExpenseTrue" name="isExpense" value="true"> True</label>
+                <label><input type="radio" id="isExpenseFalse" name="isExpense" value="false" checked> False</label>
+
+                <label for="transactionDate">Transaction Date:</label>
+                <input type="datetime-local" id="transactionDate" name="transactionDate">
+
+                <label for="transactionCategory">Category:</label>
+                <input type="text" id="transactionCategory" name="category">
+
+                <button type="button" onclick="createTransaction()">Utwórz transakcję</button>
+            </form>
+            <div id="createTransactionOutput" class="output"></div>
+        </div>
+
+        <!-- UPDATE TRANSACTION -->
+        <div class="container">
+            <h2>Zaktualizuj transakcję (PUT)</h2>
+            <form method="post" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="updateUsernameTransaction">Username:</label>
+                <input type="text" id="updateUsernameTransaction" name="username">
+
+                <label for="updateTransactionHashCode">Transaction HashCode:</label>
+                <input type="text" id="updateTransactionHashCode" name="hashCode">
+
+                <label for="updatedAmount">Nowa kwota:</label>
+                <input type="number" step="0.01" id="updatedAmount" name="amount">
+
+                <label>Is Expense:</label>
+                <label><input type="radio" id="isExpenseTrueUpdate" name="isExpenseUpdate" value="true"> True</label>
+                <label><input type="radio" id="isExpenseFalseUpdate" name="isExpenseUpdate" value="false" checked> False</label>
+
+                <label for="transactionDateUpdate">Transaction Date:</label>
+                <input type="datetime-local" id="transactionDateUpdate" name="transactionDateUpdate">
+
+                <label for="updatedCategory">Nowa kategoria:</label>
+                <input type="text" id="updatedCategory" name="category">
+
+                <button type="button" onclick="updateTransaction()">Zaktualizuj transakcję</button>
+            </form>
+            <div id="updateTransactionOutput" class="output"></div>
+        </div>
+
+        <!-- DELETE TRANSACTION -->
+        <div class="container">
+            <h2>Usuń transakcję (DELETE)</h2>
+            <form method="post" action="">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                <label for="deleteUsernameTransaction">Username:</label>
+                <input type="text" id="deleteUsernameTransaction" name="username">
+
+                <label for="deleteTransactionHashCode">Transaction HashCode:</label>
+                <input type="text" id="deleteTransactionHashCode" name="hashCode">
+
+                <button type="button" onclick="deleteTransaction()">Usuń transakcję</button>
+            </form>
+            <div id="deleteTransactionOutput" class="output"></div>
+        </div>
+        <script>
+            const baseUrl = 'http://localhost:8080/users';
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            async function getTransactionsByUser() {
+                const username = document.getElementById('getUserTransactions').value;
+                const response = await fetch(`${baseUrl}/${username}/transactions`);
+                const data = await response.json();
+                document.getElementById('getUserTransactionsOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function getTransactionsByUserAndCategory() {
+                const username = document.getElementById('getUsernameCategory').value;
+                const category = document.getElementById('getCategory').value;
+                const response = await fetch(`${baseUrl}/${username}/${category}/transactions`);
+                const data = await response.json();
+                document.getElementById('getUserCategoryTransactionsOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function createTransaction() {
+                const username = document.getElementById('createUsername').value;
+                const transaction = {
+                    amount: parseFloat(document.getElementById('transactionAmount').value),
+                    category: document.getElementById('transactionCategory').value,
+                    isExpense: document.querySelector('input[name="isExpense"]:checked').value === 'true',
+                    transactionDate: document.getElementById('transactionDate').value
+                };
+                const response = await fetch(`${baseUrl}/${username}/transactions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(transaction)
+                });
+                const data = await response.json();
+                document.getElementById('createTransactionOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function getTransaction() {
+                const username = document.getElementById('getUsernameTransaction').value;
+                const hashCode = document.getElementById('getTransactionHashCode').value;
+                const response = await fetch(`${baseUrl}/${username}/transactions/${hashCode}`);
+                const data = await response.json();
+                document.getElementById('getTransactionOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function updateTransaction() {
+                const username = document.getElementById('updateUsernameTransaction').value;
+                const hashCode = document.getElementById('updateTransactionHashCode').value;
+                const transaction = {
+                    amount: parseFloat(document.getElementById('updatedAmount').value),
+                    category: document.getElementById('updatedCategory').value,
+                    isExpense: document.querySelector('input[name="isExpenseUpdate"]:checked').value === 'true',
+                    transactionDate: document.getElementById('transactionDateUpdate').value
+                };
+                const response = await fetch(`${baseUrl}/${username}/transactions/${hashCode}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(transaction)
+                });
+                const data = await response.json();
+                document.getElementById('updateTransactionOutput').innerText = JSON.stringify(data, null, 2);
+            }
+
+            async function deleteTransaction() {
+                const username = document.getElementById('deleteUsernameTransaction').value;
+                const hashCode = document.getElementById('deleteTransactionHashCode').value;
+                const response = await fetch(`${baseUrl}/${username}/transactions/${hashCode}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                document.getElementById('deleteTransactionOutput').innerText =
+                    response.ok ? 'Transakcja usunięta' : 'Błąd przy usuwaniu transakcji';
+            }
+        </script>
+    </body>
 </html>

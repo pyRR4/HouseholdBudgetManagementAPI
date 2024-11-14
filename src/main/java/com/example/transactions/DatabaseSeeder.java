@@ -40,7 +40,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         UserEntity user = createUser();
         List<CategoryEntity> categories = seedCategoriesForUser(user.getUsername());
-        seedTransactions(user, categories);
+        seedTransactions(user.getUsername(), categories);
     }
 
     private UserEntity createUser() {
@@ -75,7 +75,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         return seededCategories;
     }
 
-    private void seedTransactions(UserEntity user, List<CategoryEntity> categories) {
+    private void seedTransactions(String username, List<CategoryEntity> categories) {
         log.info("Seeding transactions...");
         Random random = new Random();
 
@@ -85,11 +85,10 @@ public class DatabaseSeeder implements CommandLineRunner {
                     random.nextDouble() * 3000,
                     LocalDateTime.now(),
                     random.nextBoolean(),
-                    randomCategory,
-                    user
+                    randomCategory
             );
 
-            log.info("Preloading: " + transactionService.createTransaction(transaction));
+            log.info("Preloading: " + transactionService.createTransaction(username, transaction));
         }
     }
 }
