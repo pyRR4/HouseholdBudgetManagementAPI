@@ -45,7 +45,7 @@
 </div>
 
 <script>
-    const baseUrl = 'http://localhost:8080';
+    const baseUrl = 'http://localhost:8080/users';
     const csrfToken = document.querySelector('input[name="_csrf"]') ? document.querySelector('input[name="_csrf"]').value : '';
 
     async function getCategories() {
@@ -59,7 +59,7 @@
         const username = document.getElementById('newCategoryUsername').value;
         const category = document.getElementById('newCategoryName').value;
 
-        const response = await fetch(`${baseUrl}/${username}/new_category?category=${category}`, {
+        const response = await fetch(`${baseUrl}/${username}/categories?category=${category}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

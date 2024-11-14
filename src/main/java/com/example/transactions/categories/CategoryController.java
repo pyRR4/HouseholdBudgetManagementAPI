@@ -20,7 +20,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/{username}/categories")
+    @GetMapping("/users/{username}/categories")
     public ResponseEntity<List<CategoryEntity>> getUserCategories(@PathVariable String username) {
         List<CategoryEntity> categoryEntity = categoryService.getCategoriesByUsername(username);
 
@@ -28,7 +28,7 @@ public class CategoryController {
                 .ok(categoryEntity);
     }
 
-    @PostMapping("/{username}/new_category")
+    @PostMapping("/users/{username}/categories")
     public ResponseEntity<CategoryEntity> addCategory(@PathVariable String username, @RequestParam String category) {
         CategoryEntity categoryEntity = categoryService.createCategory(category, username);
 
@@ -38,7 +38,7 @@ public class CategoryController {
                 .body(categoryEntity);
     }
 
-    @DeleteMapping("/{username}/{category}")
+    @DeleteMapping("/users/{username}/{category}")
     public ResponseEntity<CategoryEntity> deleteCategory(@PathVariable String username, @PathVariable String category) {
         categoryService.deleteCategory(username, category);
 

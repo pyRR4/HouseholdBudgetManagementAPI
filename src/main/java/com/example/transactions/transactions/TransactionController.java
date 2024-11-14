@@ -18,15 +18,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/transactions")
-    public ResponseEntity<List<TransactionResponse>> getAllTransactions() {
-        List<TransactionResponse> transactions = transactionService.getAllTransactions();
-
-        return ResponseEntity
-                .ok(transactions);
-    }
-
-    @GetMapping("/transactions/{user}")
+    @GetMapping("/users/{user}/transactions")
     public ResponseEntity<List<TransactionResponse>> getTransactionsByUser(@PathVariable String user) {
         List<TransactionResponse> transactions = transactionService.getTransactionsByUser(user);
 
@@ -34,45 +26,45 @@ public class TransactionController {
                 .ok(transactions);
     }
 
-    @GetMapping("/transactions/{user}/{category}")
+    @GetMapping("/users/{username}/{category}/transactions")
     public ResponseEntity<List<TransactionResponse>> getTransactionsByUserAndCategory(
-            @PathVariable String user,
+            @PathVariable String username,
             @PathVariable String category
     ) {
-        List<TransactionResponse> transactions = transactionService.getTransactionsByUserAndCategory(user, category);
+        List<TransactionResponse> transactions = transactionService.getTransactionsByUserAndCategory(username, category);
 
         return ResponseEntity
                 .ok(transactions);
     }
 
-    @PostMapping("/transactions")
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionResponse transactionResponse) {
+    @PostMapping("/users/{username}/transactions") //TODO
+    public ResponseEntity<TransactionResponse> createTransaction(@PathVariable String username, @RequestBody TransactionResponse transactionResponse) {
         TransactionResponse savedTransactionEntity = transactionService.createTransaction(transactionResponse);
         //zmienic na response i generowac kod do uri w response
         return ResponseEntity
                 .created(linkTo(methodOn(TransactionController.class)
-                        .getTransaction(savedTransactionEntity.getHashCode())).toUri())
+                        .getTransaction(username, savedTransactionEntity.getHashCode())).toUri())
                 .body(transactionResponse);
     }
 
-    @GetMapping("/transactions/{hashCode}")
-    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable String hashCode) {
+    @GetMapping("/users/{username}/transactions/{hashCode}") //TODO
+    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable String username, @PathVariable String hashCode) {
         TransactionResponse transactionResponse = transactionService.getTransaction(hashCode);
 
         return ResponseEntity
                 .ok(transactionResponse);
     }
 
-    @PutMapping("/transactions/{hashCode}")
-    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String hashCode, @RequestBody TransactionResponse transactionResponse) {
+    @PutMapping("/users/{username}/transactions/{hashCode}") //TODO
+    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String username, @PathVariable String hashCode, @RequestBody TransactionResponse transactionResponse) {
         TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(hashCode, transactionResponse);
 
         return ResponseEntity
                 .ok(updatedTransactionResponse);
     }
 
-    @DeleteMapping("/transactions/{hashCode}")
-    public ResponseEntity<TransactionEntity> deleteTransaction(@PathVariable String hashCode) {
+    @DeleteMapping("/users/{username}/transactions/{hashCode}") //TODO
+    public ResponseEntity<TransactionEntity> deleteTransaction(@PathVariable String username, @PathVariable String hashCode) {
         transactionService.deleteTransaction(hashCode);
 
         return ResponseEntity.noContent().build();
