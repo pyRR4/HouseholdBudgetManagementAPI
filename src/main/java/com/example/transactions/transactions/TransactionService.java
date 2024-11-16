@@ -1,10 +1,8 @@
 package com.example.transactions.transactions;
 
 import com.example.transactions.HashingService;
-import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.categories.CategoryService;
 import com.example.transactions.exceptions.TransactionNotFoundException;
-import com.example.transactions.users.UserEntity;
 import com.example.transactions.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.transactions.transactions.TransactionMapper.toEntity;
 import static com.example.transactions.transactions.TransactionMapper.toResponse;
 
 @Service
@@ -25,25 +22,28 @@ public class TransactionService {
     private final CategoryService categoryService;
 
     private final HashingService hashingService;
+    private final TransactionMapper transactionMapper;
 
     @Autowired
     public TransactionService(
             TransactionRepository transactionRepository,
             HashingService hashingService,
             UserService userService,
-            CategoryService categoryService
+            CategoryService categoryService,
+            TransactionMapper transactionMapper
     ) {
         this.transactionRepository = transactionRepository;
         this.hashingService = hashingService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.transactionMapper = transactionMapper;
     }
 
     public TransactionResponse updateTransaction(String username, String hashCode, TransactionResponse transactionResponse) {
         return toResponse(transactionRepository.findByUserUsernameAndHashCode(username, hashCode)
                 .map(oldTransaction -> {
                     oldTransaction.setTransactionDate(transactionResponse.getTransactionDate());
-                    oldTransaction.setCategory(transactionResponse.getTransactionCategory());
+                    oldTransaction.setCategory(categoryService.getCategoryByUsernameAndName(username, transactionResponse.getTransactionCategory()));
                     oldTransaction.setTransactionValue(transactionResponse.getTransactionValue());
                     oldTransaction.setExpense(transactionResponse.isExpense());
                     return transactionRepository.save(oldTransaction);
@@ -52,7 +52,9 @@ public class TransactionService {
 
     public TransactionResponse createTransaction(String username, TransactionResponse transactionResponse) {
         //obliczanie salda konta usera
-        TransactionEntity transactionEntity = toEntity(transactionResponse);
+        System.out.println(transactionResponse);
+        TransactionEntity transactionEntity = transactionMapper.toEntity(transactionResponse, username);
+        System.out.println(transactionEntity);
         transactionEntity.setUser(userService.getUserByUsername(username));
         transactionEntity.setHashCode(hashingService.hash(transactionEntity.toString()));
         transactionResponse.setHashCode(transactionEntity.getHashCode());

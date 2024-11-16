@@ -146,7 +146,7 @@
             async function getTransactionsByUserAndCategory() {
                 const username = document.getElementById('getUsernameCategory').value;
                 const category = document.getElementById('getCategory').value;
-                const response = await fetch(`${baseUrl}/${username}/${category}/transactions`);
+                const response = await fetch(`${baseUrl}/${username}/transactions/${category}`);
                 const data = await response.json();
                 document.getElementById('getUserCategoryTransactionsOutput').innerText = JSON.stringify(data, null, 2);
             }
@@ -154,11 +154,12 @@
             async function createTransaction() {
                 const username = document.getElementById('createUsername').value;
                 const transaction = {
-                    amount: parseFloat(document.getElementById('transactionAmount').value),
-                    category: document.getElementById('transactionCategory').value,
-                    isExpense: document.querySelector('input[name="isExpense"]:checked').value === 'true',
-                    transactionDate: document.getElementById('transactionDate').value
+                    transactionValue: parseFloat(document.getElementById('transactionAmount').value) || 0.0,
+                    transactionCategory: document.getElementById('transactionCategory').value || null,
+                    expense: document.querySelector('input[name="isExpense"]:checked').value === 'true',
+                    transactionDate: document.getElementById('transactionDate').value || null
                 };
+                console.log(transaction);
                 const response = await fetch(`${baseUrl}/${username}/transactions`, {
                     method: 'POST',
                     headers: {
@@ -183,9 +184,9 @@
                 const username = document.getElementById('updateUsernameTransaction').value;
                 const hashCode = document.getElementById('updateTransactionHashCode').value;
                 const transaction = {
-                    amount: parseFloat(document.getElementById('updatedAmount').value),
-                    category: document.getElementById('updatedCategory').value,
-                    isExpense: document.querySelector('input[name="isExpenseUpdate"]:checked').value === 'true',
+                    transactionValue: parseFloat(document.getElementById('updatedAmount').value),
+                    transactionCategory: document.getElementById('updatedCategory').value,
+                    expense: document.querySelector('input[name="isExpenseUpdate"]:checked').value === 'true',
                     transactionDate: document.getElementById('transactionDateUpdate').value
                 };
                 const response = await fetch(`${baseUrl}/${username}/transactions/${hashCode}`, {

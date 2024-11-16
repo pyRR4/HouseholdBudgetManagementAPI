@@ -85,7 +85,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     random.nextDouble() * 3000,
                     LocalDateTime.now(),
                     random.nextBoolean(),
-                    randomCategory
+                    randomCategory.getName()
             );
 
             log.info("Preloading: " + transactionService.createTransaction(username, transaction));

@@ -5,11 +5,14 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 @Service
 public class HashingService {
 
     public String hash(String input) {
+        Random random = new Random();
+        input += random.nextDouble();
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest(input.getBytes(StandardCharsets.UTF_8));

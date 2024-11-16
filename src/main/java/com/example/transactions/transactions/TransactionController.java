@@ -2,6 +2,7 @@ package com.example.transactions.transactions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class TransactionController {
                 .ok(transactions);
     }
 
-    @GetMapping("/users/{username}/{category}/transactions")
+    @GetMapping("/users/{username}/transactions/{category}")
     public ResponseEntity<List<TransactionResponse>> getTransactionsByUserAndCategory(
             @PathVariable String username,
             @PathVariable String category
@@ -37,8 +38,9 @@ public class TransactionController {
                 .ok(transactions);
     }
 
-    @PostMapping("/users/{username}/transactions") //TODO
-    public ResponseEntity<TransactionResponse> createTransaction(@PathVariable String username, @RequestBody TransactionResponse transactionResponse) {
+    @PostMapping("/users/{username}/transactions")
+    public ResponseEntity<TransactionResponse> createTransaction(@PathVariable String username, @Validated @RequestBody TransactionResponse transactionResponse) {
+        System.out.println(transactionResponse);
         TransactionResponse savedTransactionEntity = transactionService.createTransaction(username, transactionResponse);
         //zmienic na response i generowac kod do uri w response
         return ResponseEntity

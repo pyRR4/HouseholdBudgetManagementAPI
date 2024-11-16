@@ -1,7 +1,6 @@
 package com.example.transactions.transactions;
 
-import com.example.transactions.categories.CategoryEntity;
-import com.example.transactions.users.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,21 +10,20 @@ import java.time.LocalDateTime;
 public class TransactionResponse { //DTO class
 
     private double transactionValue;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime transactionDate;
     private boolean expense;
-    private CategoryEntity transactionCategory;
+    private String transactionCategory;
     private String hashCode;
 
-    public TransactionResponse() {}
-
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory) {
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, String transactionCategory) {
         this.transactionValue = transactionValue;
         this.transactionDate = transactionDate;
         this.expense = expense;
         this.transactionCategory = transactionCategory;
     }
 
-    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, CategoryEntity transactionCategory, String hashCode) {
+    public TransactionResponse(double transactionValue, LocalDateTime transactionDate, boolean expense, String transactionCategory, String hashCode) {
         this(transactionValue, transactionDate, expense, transactionCategory);
         this.hashCode = hashCode;
     }
