@@ -27,7 +27,7 @@ public class TransactionController {
                 .ok(transactions);
     }
 
-    @GetMapping("/users/{username}/transactions/{category}")
+    @GetMapping("/users/{username}/transactions/category/{category}")
     public ResponseEntity<List<TransactionResponse>> getTransactionsByUserAndCategory(
             @PathVariable String username,
             @PathVariable String category

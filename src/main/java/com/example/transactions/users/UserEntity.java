@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Getter
@@ -37,7 +39,7 @@ public class UserEntity {
 
     @NotNull(message = "User balance cannot be null")
     @Digits(integer = 10, fraction = 2, message = "Amount must be a valid number with up to 2 decimal places")
-    private double balance;
+    private BigDecimal balance;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -54,7 +56,7 @@ public class UserEntity {
         this.password = password;
         this.nickname = nickname;
         this.email = email;
-        this.balance = 0;
+        this.balance = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
     }
 
 }

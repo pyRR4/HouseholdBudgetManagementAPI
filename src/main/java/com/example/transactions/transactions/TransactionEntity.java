@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,7 +27,7 @@ public class TransactionEntity {
     @NotNull(message = "TransactionValue cannot be null")
     @Positive(message = "Amount must be a positive number")
     @Digits(integer = 10, fraction = 2, message = "Amount must be a valid number with up to 2 decimal places")
-    private double transactionValue;
+    private BigDecimal transactionValue;
 
     @NotNull(message = "TransactionDate cannot be null")
     private LocalDateTime transactionDate;

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,7 +84,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         for (int i = 0; i < 5; i++) {
             CategoryEntity randomCategory = categories.get(random.nextInt(categories.size()));
             TransactionResponse transaction = new TransactionResponse(
-                    random.nextDouble() * 3000,
+                    BigDecimal.valueOf(random.nextDouble() * 3000)
+                            .setScale(2, RoundingMode.HALF_UP),
                     LocalDateTime.now(),
                     random.nextBoolean(),
                     randomCategory.getName()

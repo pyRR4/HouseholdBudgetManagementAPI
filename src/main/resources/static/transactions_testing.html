@@ -139,16 +139,16 @@
             async function getTransactionsByUser() {
                 const username = document.getElementById('getUserTransactions').value;
                 const response = await fetch(`${baseUrl}/${username}/transactions`);
-                const data = await response.json();
-                document.getElementById('getUserTransactionsOutput').innerText = JSON.stringify(data, null, 2);
+                const outputElement = document.getElementById('getUserTransactionsOutput');
+                await handleResponse(response, outputElement);
             }
 
             async function getTransactionsByUserAndCategory() {
                 const username = document.getElementById('getUsernameCategory').value;
                 const category = document.getElementById('getCategory').value;
-                const response = await fetch(`${baseUrl}/${username}/transactions/${category}`);
-                const data = await response.json();
-                document.getElementById('getUserCategoryTransactionsOutput').innerText = JSON.stringify(data, null, 2);
+                const response = await fetch(`${baseUrl}/${username}/transactions/category/${category}`);
+                const outputElement = document.getElementById('getUserCategoryTransactionsOutput');
+                await handleResponse(response, outputElement);
             }
 
             async function createTransaction() {
@@ -168,16 +168,16 @@
                     },
                     body: JSON.stringify(transaction)
                 });
-                const data = await response.json();
-                document.getElementById('createTransactionOutput').innerText = JSON.stringify(data, null, 2);
+                const outputElement = document.getElementById('createTransactionOutput');
+                await handleResponse(response, outputElement);
             }
 
             async function getTransaction() {
                 const username = document.getElementById('getUsernameTransaction').value;
                 const hashCode = document.getElementById('getTransactionHashCode').value;
                 const response = await fetch(`${baseUrl}/${username}/transactions/${hashCode}`);
-                const data = await response.json();
-                document.getElementById('getTransactionOutput').innerText = JSON.stringify(data, null, 2);
+                const outputElement = document.getElementById('getTransactionOutput');
+                await handleResponse(response, outputElement);
             }
 
             async function updateTransaction() {
@@ -197,8 +197,8 @@
                     },
                     body: JSON.stringify(transaction)
                 });
-                const data = await response.json();
-                document.getElementById('updateTransactionOutput').innerText = JSON.stringify(data, null, 2);
+                const outputElement = document.getElementById('updateTransactionOutput');
+                await handleResponse(response, outputElement);
             }
 
             async function deleteTransaction() {
@@ -211,9 +211,29 @@
                         'X-CSRF-TOKEN': csrfToken
                     }
                 });
-                document.getElementById('deleteTransactionOutput').innerText =
-                    response.ok ? 'Transakcja usunięta' : 'Błąd przy usuwaniu transakcji';
+                const outputElement = document.getElementById('deleteTransactionOutput');
+                if (response.ok) {
+                    outputElement.innerText = 'Transakcja usunięta';
+                } else {
+                    await handleResponse(response, outputElement);
+                }
             }
+
+            async function handleResponse(response, outputElement) {
+                try {
+                    const contentType = response.headers.get('Content-Type') || '';
+                    if (contentType.includes('application/json')) {
+                        const data = await response.json();
+                        outputElement.innerText = JSON.stringify(data, null, 2);
+                    } else {
+                        const text = await response.text();
+                        outputElement.innerText = text;
+                    }
+                } catch (error) {
+                    outputElement.innerText = `Błąd przetwarzania odpowiedzi: ${error.message}`;
+                }
+            }
+
         </script>
     </body>
 </html>
