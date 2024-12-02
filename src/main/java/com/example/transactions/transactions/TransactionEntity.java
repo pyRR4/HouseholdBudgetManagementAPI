@@ -3,6 +3,9 @@ package com.example.transactions.transactions;
 import com.example.transactions.categories.CategoryEntity;
 import com.example.transactions.users.UserEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,24 +23,27 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
-    @Column(nullable = false)
+    @NotNull(message = "TransactionValue cannot be null")
+    @Positive(message = "Amount must be a positive number")
+    @Digits(integer = 10, fraction = 2, message = "Amount must be a valid number with up to 2 decimal places")
     private double transactionValue;
 
-    @Column(nullable = false)
+    @NotNull(message = "TransactionDate cannot be null")
     private LocalDateTime transactionDate;
 
-    @Column(nullable = false)
+    @NotNull(message = "Transaction is expense cannot be null")
     private boolean expense;
 
     @ManyToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
     private CategoryEntity category;
 
-    @Column(nullable = false)
+    @NotNull(message = "Transaction hashCode cannot be null")
     private String hashCode;
 
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username")
+    @NotNull(message = "Transaction user cannot be null")
     private UserEntity user;
 
     public TransactionEntity() {}

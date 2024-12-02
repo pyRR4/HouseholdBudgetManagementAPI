@@ -4,6 +4,7 @@ import com.example.transactions.HashingService;
 import com.example.transactions.categories.CategoryService;
 import com.example.transactions.exceptions.TransactionNotFoundException;
 import com.example.transactions.users.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ public class TransactionService {
         this.transactionMapper = transactionMapper;
     }
 
-    public TransactionResponse updateTransaction(String username, String hashCode, TransactionResponse transactionResponse) {
+    public TransactionResponse updateTransaction(String username, String hashCode, @Valid TransactionResponse transactionResponse) {
         return toResponse(transactionRepository.findByUserUsernameAndHashCode(username, hashCode)
                 .map(oldTransaction -> {
                     oldTransaction.setTransactionDate(transactionResponse.getTransactionDate());
@@ -50,7 +51,7 @@ public class TransactionService {
                 }).orElseThrow(() -> new TransactionNotFoundException(hashCode)));
     }
 
-    public TransactionResponse createTransaction(String username, TransactionResponse transactionResponse) {
+    public TransactionResponse createTransaction(String username, @Valid TransactionResponse transactionResponse) {
         //obliczanie salda konta usera
         System.out.println(transactionResponse);
         TransactionEntity transactionEntity = transactionMapper.toEntity(transactionResponse, username);

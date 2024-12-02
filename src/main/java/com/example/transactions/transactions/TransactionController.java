@@ -58,7 +58,7 @@ public class TransactionController {
     }
 
     @PutMapping("/users/{username}/transactions/{hashCode}")
-    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String username, @PathVariable String hashCode, @RequestBody TransactionResponse transactionResponse) {
+    public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable String username, @PathVariable String hashCode, @Validated @RequestBody TransactionResponse transactionResponse) {
         TransactionResponse updatedTransactionResponse = transactionService.updateTransaction(username, hashCode, transactionResponse);
 
         return ResponseEntity
