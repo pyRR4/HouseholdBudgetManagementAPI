@@ -1,4 +1,4 @@
-package com.example.transactions.service.contracts;
+package com.example.transactions.service.contract;
 
 import com.example.transactions.dto.CategoryDTO;
 import com.example.transactions.service.generic.ReadOnlyService;
