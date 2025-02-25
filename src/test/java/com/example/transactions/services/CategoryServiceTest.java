@@ -1,4 +1,4 @@
-package com.example.transactions;
+package com.example.transactions.services;
 
 import com.example.transactions.dto.CategoryDTO;
 import com.example.transactions.entity.Category;
