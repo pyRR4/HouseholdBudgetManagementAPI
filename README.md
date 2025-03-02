@@ -9,24 +9,9 @@
 ## Overview
 This project is a simple financial management API that allows users to manage their personal finances by recording transactions, monitoring savings goals, and generating monthly reports. It is built using Spring Boot, with Spring Security (JWT) for authentication, Hibernate (ORM) for data persistence, and PostgreSQL as the database. The API will eventually support the following functionalities:
 
-* Managing transactions (CRUD operations for expenses and income)
+* Managing daily transactions
 * Categorizing transactions (food, transport, entertainment, etc.)
 * Generating monthly financial reports
 * Setting and monitoring savings goals
-* User authentication and authorization with JWT
+* User authentication
 * Secure access to user-specific data
-
-
-## To-Do's
-
-* Add custom validator
-* CSRF security
-* Ensure data integrity
-* Transactions filtering
-* Savings goals feature
-* Think about layers in project
-* Monthly reports endpoint
-* Move database to PostgreSQL
-* Front-end dashboard (optional)
-* Users authentication
-
