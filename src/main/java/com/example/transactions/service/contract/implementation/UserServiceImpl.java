@@ -2,7 +2,7 @@ package com.example.transactions.service.contract.implementation;
 
 import com.example.transactions.dto.UserDTO;
 import com.example.transactions.entity.User;
-import com.example.transactions.exceptions.UserNotFound;
+import com.example.transactions.exception.UserNotFound;
 import com.example.transactions.mapper.UserMapper;
 import com.example.transactions.repository.UserRepository;
 import com.example.transactions.service.contract.UserService;

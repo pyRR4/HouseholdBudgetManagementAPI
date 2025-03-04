@@ -2,7 +2,7 @@ package com.example.transactions.services;
 
 import com.example.transactions.dto.TransactionDTO;
 import com.example.transactions.entity.Transaction;
-import com.example.transactions.exceptions.TransactionNotFound;
+import com.example.transactions.exception.TransactionNotFound;
 import com.example.transactions.mapper.TransactionMapper;
 import com.example.transactions.repository.TransactionRepository;
 import com.example.transactions.service.contract.implementation.TransactionServiceImpl;

@@ -1,11 +1,5 @@
 package com.example.transactions.service.generic;
 
-import java.util.List;
-
-public interface CRUDService<T, ID> {
-    T create(T dto);
+public interface CRUDService<T, ID> extends ReadOnlyService<T, ID>, CreateDeleteService<T, ID> {
     T update(ID id, T dto);
-    void delete(ID id);
-    T getById(ID id);
-    List<T> getAll();
 }

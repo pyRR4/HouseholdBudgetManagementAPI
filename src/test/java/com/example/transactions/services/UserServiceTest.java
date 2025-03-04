@@ -2,7 +2,7 @@ package com.example.transactions.services;
 
 import com.example.transactions.dto.UserDTO;
 import com.example.transactions.entity.User;
-import com.example.transactions.exceptions.UserNotFound;
+import com.example.transactions.exception.UserNotFound;
 import com.example.transactions.mapper.UserMapper;
 import com.example.transactions.repository.UserRepository;
 import com.example.transactions.service.contract.implementation.UserServiceImpl;
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.update(user.getId(), userDTO))
                 .isInstanceOf(UserNotFound.class)
-                .hasMessageContaining("User not found with id " + user.getId());
+                .hasMessageContaining(String.format("User with ID: %s not found.", user.getId()));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.delete(user.getId()))
                 .isInstanceOf(UserNotFound.class)
-                .hasMessageContaining("User not found with id " + user.getId());
+                .hasMessageContaining(String.format("User with ID: %s not found.", user.getId()));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> userService.getById(user.getId()))
                 .isInstanceOf(UserNotFound.class)
-                .hasMessageContaining("User not found with id " + user.getId());
+                .hasMessageContaining(String.format("User with ID: %s not found.", user.getId()));
     }
 
     @Test

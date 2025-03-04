@@ -2,7 +2,7 @@ package com.example.transactions.service.contract.implementation;
 
 import com.example.transactions.dto.CategoryDTO;
 import com.example.transactions.entity.Category;
-import com.example.transactions.exceptions.CategoryNotFound;
+import com.example.transactions.exception.CategoryNotFound;
 import com.example.transactions.mapper.CategoryMapper;
 import com.example.transactions.repository.CategoryRepository;
 import com.example.transactions.service.contract.CategoryService;

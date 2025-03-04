@@ -1,6 +1,6 @@
-package com.example.transactions.exceptions;
+package com.example.transactions.exception;
 
-public class UserNotFound extends RuntimeException {
+public class UserNotFound extends NotFoundException {
     public UserNotFound(String username) {
         super(String.format("User with username: %s not found.", username));
     }
