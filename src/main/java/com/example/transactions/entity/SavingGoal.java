@@ -4,21 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "transactions"
+        name = "saving_goals"
 )
-@Setter
-@Getter
+@AllArgsConstructor
 @NoArgsConstructor
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@Getter
+@Setter
 @ToString
-public class Transaction {
+public class SavingGoal {
 
     @Id
     @Column(nullable = false)
@@ -26,13 +22,16 @@ public class Transaction {
     private Long id;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private String title;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private double amount;
+
+    @Column(nullable = false)
+    private double currentAmount;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Category category;
+    private User user;
 }

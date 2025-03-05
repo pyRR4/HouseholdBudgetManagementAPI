@@ -19,7 +19,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(nullable = false, columnDefinition = "serial")
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -36,8 +36,8 @@ public class User {
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions;
+    private List<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Category> categories;
+    private List<SavingGoal> savingGoals;
 }

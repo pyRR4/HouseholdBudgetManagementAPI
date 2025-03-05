@@ -45,7 +45,6 @@ class CategoryServiceTest {
         user.setPassword("password");
         user.setEmail("email");
         user.setBalance(BigDecimal.ZERO);
-        user.setTransactions(List.of());
 
         category = new Category();
         category.setId(1L);

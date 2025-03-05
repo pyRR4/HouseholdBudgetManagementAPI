@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(
         name = "categories",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user", "name"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"})
 )
 @Getter
 @Setter
@@ -21,7 +21,7 @@ import java.util.List;
 public class Category {
 
     @Id
-    @Column(columnDefinition = "serial")
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -29,7 +29,7 @@ public class Category {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

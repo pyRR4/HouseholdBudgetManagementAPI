@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/transactions")
+@RestController
+@RequestMapping("/transactions")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class TransactionController {

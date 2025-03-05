@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/users")
+@RestController
+@RequestMapping("/users")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class UserController {

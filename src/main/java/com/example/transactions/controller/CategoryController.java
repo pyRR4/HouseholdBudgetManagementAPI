@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/categories")
+@RestController
+@RequestMapping("/categories")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class CategoryController {
