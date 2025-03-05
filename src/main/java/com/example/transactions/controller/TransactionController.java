@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class TransactionController {
 
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
     @GetMapping
     public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
@@ -56,7 +56,7 @@ public class TransactionController {
         log.info("Deleted transaction: {}", id);
 
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .noContent()
                 .build();
     }
 
