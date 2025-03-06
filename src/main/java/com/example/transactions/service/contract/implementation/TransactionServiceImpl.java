@@ -25,7 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO create(TransactionDTO transactionDTO) {
         Transaction transaction = transactionMapper.toEntity(transactionDTO);
 
-        log.debug("Created transaction: {}", transaction);
+        log.info("Created transaction: {}", transaction);
 
         transactionRepository.save(transaction);
 
@@ -39,18 +39,26 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.delete(transaction);
 
-        log.debug("Deleted transaction: {}", transaction);
+        log.info("Deleted transaction: {}", transaction);
     }
 
     @Override
     public TransactionDTO getById(Long id) {
-        return transactionMapper.toDTO(transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound(id)));
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound(id));
+
+        log.info("Retrieved transaction: {}", transaction);
+
+        return transactionMapper.toDTO(transaction);
     }
 
     @Override
     public List<TransactionDTO> getAll() {
-        return transactionRepository.findAll().stream()
+        List<Transaction> transactions = transactionRepository.findAll();
+
+        log.info("Retrieved all transactions: {}", transactions);
+
+        return transactions.stream()
                 .map(transactionMapper::toDTO)
                 .toList();
     }

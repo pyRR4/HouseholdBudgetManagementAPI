@@ -25,9 +25,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO create(UserDTO dto) {
         User user = userMapper.toEntity(dto);
 
-        log.debug("Created user: {}", user);
-
         userRepository.save(user);
+
+        log.info("Created user: {}", user);
 
         return userMapper.toDTO(user);
     }
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        log.debug("Updated user: {}", user);
+        log.info("Updated user: {}", user);
 
         return userMapper.toDTO(user);
     }
@@ -57,18 +57,26 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
 
-        log.debug("Deleted user: {}", user);
+        log.info("Deleted user: {}", user);
     }
 
     @Override
     public UserDTO getById(Long id) {
-        return userMapper.toDTO(userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFound(id)));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFound(id));
+
+        log.info("Retrieved user: {}", user);
+
+        return userMapper.toDTO(user);
     }
 
     @Override
     public List<UserDTO> getAll() {
-        return userRepository.findAll().stream()
+        List<User> users = userRepository.findAll();
+
+        log.info("Retrieved all users: {}", users);
+
+        return users.stream()
                 .map(userMapper::toDTO)
                 .toList();
     }

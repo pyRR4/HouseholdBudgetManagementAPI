@@ -24,9 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO create(CategoryDTO categoryDTO) {
         Category category = categoryMapper.toEntity(categoryDTO);
 
-        log.debug("Created category: {}", category);
-
         categoryRepository.save(category);
+
+        log.info("Created category: {}", category);
 
         return categoryMapper.toDTO(category);
     }
@@ -38,18 +38,26 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.delete(category);
 
-        log.debug("Deleted category: {}", category);
+        log.info("Deleted category: {}", category);
     }
 
     @Override
     public CategoryDTO getById(Long id) {
-        return categoryMapper.toDTO(categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFound(id)));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFound(id));
+
+        log.info("Retrieved category: {}", category);
+
+        return categoryMapper.toDTO(category);
     }
 
     @Override
     public List<CategoryDTO> getAll() {
-        return categoryRepository.findAll().stream()
+        List<Category> categories = categoryRepository.findAll();
+
+        log.info("Retrieved categories: {}", categories.size());
+
+        return categories.stream()
                 .map(categoryMapper::toDTO)
                 .toList();
     }
