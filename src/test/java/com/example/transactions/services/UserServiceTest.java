@@ -40,8 +40,22 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "john_doe", "securePass123", "john@example.com", new BigDecimal("1000.00"), null, null);
-        userDTO = new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getBalance().doubleValue());
+        user = new User(
+                1L,
+                "john_doe",
+                "securePass123",
+                "john@example.com",
+                new BigDecimal("1000.00"),
+                null,
+                null
+        );
+        userDTO = new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getBalance().doubleValue()
+        );
     }
 
     @Test

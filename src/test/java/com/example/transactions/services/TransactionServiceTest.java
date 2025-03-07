@@ -3,6 +3,7 @@ package com.example.transactions.services;
 import com.example.transactions.dto.TransactionDTO;
 import com.example.transactions.entity.Transaction;
 import com.example.transactions.exception.TransactionNotFound;
+import com.example.transactions.mapper.CategoryMapper;
 import com.example.transactions.mapper.TransactionMapper;
 import com.example.transactions.repository.TransactionRepository;
 import com.example.transactions.service.contract.implementation.TransactionServiceImpl;
@@ -32,6 +33,9 @@ class TransactionServiceTest {
     @Mock
     private TransactionMapper transactionMapper;
 
+    @Mock
+    private CategoryMapper categoryMapper;
+
     @InjectMocks
     private TransactionServiceImpl transactionService;
 
@@ -41,7 +45,8 @@ class TransactionServiceTest {
     @BeforeEach
     void setUp() {
         transaction = new Transaction(1L, new BigDecimal("100.00"), LocalDateTime.now(), null);
-        transactionDTO = new TransactionDTO(transaction.getId(), transaction.getAmount().doubleValue(), transaction.getDate(), null);
+        transactionDTO = new TransactionDTO(transaction.getId(), transaction.getAmount().doubleValue(),
+                transaction.getDate(), categoryMapper.toDTO(transaction.getCategory()));
     }
 
     @Test
