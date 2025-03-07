@@ -2,7 +2,6 @@ package com.example.transactions.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
 @ToString
 public class User {
 

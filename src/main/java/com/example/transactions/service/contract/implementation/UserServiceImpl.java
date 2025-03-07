@@ -8,13 +8,12 @@ import com.example.transactions.repository.UserRepository;
 import com.example.transactions.service.contract.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
